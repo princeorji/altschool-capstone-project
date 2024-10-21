@@ -1,6 +1,4 @@
-import { Document } from 'mongoose';
-
-export interface IUrl extends Document {
+export interface IUrl {
   originalUrl: string;
   shortUrl: string;
   customUrl?: string;

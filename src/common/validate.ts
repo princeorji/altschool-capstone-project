@@ -7,7 +7,11 @@ export default function validateRequest(validator: keyof typeof Validators) {
     throw new Error(`'${validator}' validator is not exist`);
   }
 
-  return async function (req: Request, res: Response, next: NextFunction) {
+  return async function (
+    req: Request,
+    res: Response,
+    next: NextFunction,
+  ): Promise<void> {
     try {
       const schema = Validators[validator];
       const validated = await schema.validateAsync(req.body);
@@ -15,7 +19,8 @@ export default function validateRequest(validator: keyof typeof Validators) {
       next();
     } catch (err) {
       if (err instanceof Joi.ValidationError) {
-        return res.status(422).json({ message: err.message });
+        res.status(422).json({ message: err.message });
+        return;
       }
       next(err);
     }
